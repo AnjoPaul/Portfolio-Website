@@ -247,7 +247,7 @@ a:hover {
 }
 .hero-parallax-bg {
     height: 100vh; /* Full viewport height */
-    background-image: url('assets/hero-background.jpg'); /* ❗ YOUR HERO IMAGE HERE */
+    background-image: url('assets/background.webp'); /* ❗ YOUR HERO IMAGE HERE */
     background-size: cover;
     background-position: center center;
     background-attachment: fixed; /* This creates the simple parallax effect */
@@ -326,6 +326,7 @@ a:hover {
     padding: 80px 1.5rem; /* Consistent padding for content sections */
 }
 .alt-bg-section { /* For Skills and Contact */
+    
     background-color: var(--bg-secondary);
 }
 
