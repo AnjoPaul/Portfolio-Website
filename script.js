@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     const navLinks = document.querySelectorAll('.nav-menu .nav-link');
-    const mainHeader = document.getElementById('main-header'); // For hide/show on scroll
+    const mainHeader = document.getElementById('main-header');
 
     if (hamburger && navMenu) {
         hamburger.addEventListener('click', () => {
@@ -41,33 +41,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const cursorDot = document.querySelector('.custom-cursor-dot');
     const cursorOutline = document.querySelector('.custom-cursor-outline');
 
-    // Function to check if it's likely a touch device
     function isTouchDevice() {
         return (('ontouchstart' in window) ||
                (navigator.maxTouchPoints > 0) ||
                (navigator.msMaxTouchPoints > 0));
     }
 
-    if (!isTouchDevice()) { // Only initialize if NOT a touch device
+    if (!isTouchDevice()) {
         if (cursorDot && cursorOutline) {
-            // Make custom cursor elements visible (CSS hides them by default)
-            // body:hover rule in CSS will handle opacity once this is not display:none
-            // We need to override the initial opacity: 0 in CSS for the body:hover to take effect
-            // cursorDot.style.opacity = '1'; // Or handle via a class
-            // cursorOutline.style.opacity = '1';
-
-            // Let CSS handle initial opacity via body:hover
-            // The JS will just attach event listeners
-
-            document.body.style.cursor = 'none'; // Hide default system cursor
+            document.body.style.cursor = 'none';
 
             window.addEventListener('mousemove', e => {
                 const posX = e.clientX;
                 const posY = e.clientY;
-
                 cursorDot.style.left = `${posX}px`;
                 cursorDot.style.top = `${posY}px`;
-
                 cursorOutline.animate({
                     left: `${posX}px`,
                     top: `${posY}px`
@@ -75,18 +63,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     } else {
-        // On touch devices, ensure default cursor is used and custom ones are definitely hidden
         if (cursorDot) cursorDot.style.display = 'none';
         if (cursorOutline) cursorOutline.style.display = 'none';
-        document.body.style.cursor = 'auto'; // Ensure default cursor
+        document.body.style.cursor = 'auto';
     }
-
 
     // --- Typed Text Effect ---
     const typedOutput = document.getElementById('typed-output');
     const typedCursor = document.querySelector('.typed-cursor');
     if (typedOutput && typedCursor) {
-        const phrases = [ // Customize these!
+        const phrases = [
             "Software Developer",
             "Full-Stack Enthusiast",
             "Creative Problem Solver",
@@ -95,13 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let phraseIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        const typeSpeed = 120; // milliseconds
+        const typeSpeed = 120;
         const deleteSpeed = 60;
         const pauseBetweenPhrases = 1800;
-        let typeTimeout; // To clear timeout if needed
+        let typeTimeout;
 
         function type() {
-            clearTimeout(typeTimeout); // Clear previous timeout
+            clearTimeout(typeTimeout);
             typedCursor.style.display = 'inline';
             const currentPhrase = phrases[phraseIndex];
             let textToDisplay = '';
@@ -123,15 +109,14 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 phraseIndex = (phraseIndex + 1) % phrases.length;
-                delay = typeSpeed; // Start typing next word quickly
+                delay = typeSpeed;
             }
             typeTimeout = setTimeout(type, delay);
         }
-        if (phrases.length > 0) { // Only start if there are phrases
-           typeTimeout = setTimeout(type, 500); // Initial delay before typing starts
+        if (phrases.length > 0) {
+           typeTimeout = setTimeout(type, 500);
         }
     }
-
 
     // --- Active Link Highlighting & Dot Navigation ---
     const mainNavLinksJS = document.querySelectorAll('#navbar .nav-link');
@@ -141,36 +126,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateActiveLink() {
         let currentSectionId = '';
-        let minDistance = Infinity;
+        // Use a more generous offset for determining "current" section.
+        // This helps when sections are short or scrolling is fast.
+        const scrollPosition = window.scrollY + headerHeightJS + window.innerHeight / 2.5;
+
 
         sectionsJS.forEach(section => {
-            const sectionTop = section.offsetTop - headerHeightJS;
-            // const distanceToTop = Math.abs(window.scrollY - sectionTop); // Not used currently
-
-            // Adjusted condition for better accuracy: check if scrollY is within the section bounds
-            // considering a bit of buffer for the header and user perception
-            if (window.scrollY >= sectionTop - 50 && window.scrollY < sectionTop + section.offsetHeight - headerHeightJS - 50) {
+            if (scrollPosition >= section.offsetTop && scrollPosition < section.offsetTop + section.offsetHeight) {
                 currentSectionId = section.getAttribute('id');
-                return; // Exit early if a good match is found
             }
         });
         
-        // If no section is actively matched by the above, check the closest (fallback)
-        // This is helpful for very short sections or unusual scroll positions
+        // Fallback: if no section is matched (e.g. at very top/bottom)
+        // or if currentSectionId is still empty, try finding closest.
         if (!currentSectionId) {
+            let minDistance = Infinity;
             sectionsJS.forEach(section => {
-                const sectionTop = section.offsetTop - headerHeightJS;
-                const distanceToTop = Math.abs(window.scrollY - sectionTop);
-                 if (distanceToTop < minDistance) {
-                    minDistance = distanceToTop;
+                const sectionTop = section.offsetTop - headerHeightJS; // Consider header for distance calculation
+                const distance = Math.abs(window.scrollY - sectionTop);
+                if (distance < minDistance) {
+                    minDistance = distance;
                     currentSectionId = section.getAttribute('id');
                 }
             });
-        }
-        
-        // If at the very top, ensure 'hero-section' is active
-        if (window.scrollY < sectionsJS[0].offsetTop + sectionsJS[0].offsetHeight / 2 - headerHeightJS) {
-            currentSectionId = sectionsJS[0].getAttribute('id');
         }
 
 
@@ -190,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', updateActiveLink);
     window.addEventListener('load', updateActiveLink);
 
-
     // --- On-Scroll Animations ---
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
     if (animatedElements.length > 0) {
@@ -208,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
         animatedElements.forEach(el => observer.observe(el));
     }
 
-    // --- Contact Form (Basic: logs to console) ---
+    // --- Contact Form ---
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
