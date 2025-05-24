@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
-            // Prevent body scroll when mobile menu is open
             document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
         });
 
@@ -30,35 +29,58 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', () => {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             if (scrollTop > lastScrollTop && scrollTop > mainHeader.offsetHeight) {
-                // Scroll Down
                 mainHeader.classList.add('header-hidden');
             } else {
-                // Scroll Up or at top
                 mainHeader.classList.remove('header-hidden');
             }
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
         }, false);
     }
 
-
-    // --- Custom Cursor ---
+    // --- Custom Cursor (Desktop/Laptop Screens Only) ---
     const cursorDot = document.querySelector('.custom-cursor-dot');
     const cursorOutline = document.querySelector('.custom-cursor-outline');
 
-    if (cursorDot && cursorOutline) {
-        window.addEventListener('mousemove', e => {
-            const posX = e.clientX;
-            const posY = e.clientY;
-
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-
-            cursorOutline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 300, fill: 'forwards' });
-        });
+    // Function to check if it's likely a touch device
+    function isTouchDevice() {
+        return (('ontouchstart' in window) ||
+               (navigator.maxTouchPoints > 0) ||
+               (navigator.msMaxTouchPoints > 0));
     }
+
+    if (!isTouchDevice()) { // Only initialize if NOT a touch device
+        if (cursorDot && cursorOutline) {
+            // Make custom cursor elements visible (CSS hides them by default)
+            // body:hover rule in CSS will handle opacity once this is not display:none
+            // We need to override the initial opacity: 0 in CSS for the body:hover to take effect
+            // cursorDot.style.opacity = '1'; // Or handle via a class
+            // cursorOutline.style.opacity = '1';
+
+            // Let CSS handle initial opacity via body:hover
+            // The JS will just attach event listeners
+
+            document.body.style.cursor = 'none'; // Hide default system cursor
+
+            window.addEventListener('mousemove', e => {
+                const posX = e.clientX;
+                const posY = e.clientY;
+
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+
+                cursorOutline.animate({
+                    left: `${posX}px`,
+                    top: `${posY}px`
+                }, { duration: 300, fill: 'forwards' });
+            });
+        }
+    } else {
+        // On touch devices, ensure default cursor is used and custom ones are definitely hidden
+        if (cursorDot) cursorDot.style.display = 'none';
+        if (cursorOutline) cursorOutline.style.display = 'none';
+        document.body.style.cursor = 'auto'; // Ensure default cursor
+    }
+
 
     // --- Typed Text Effect ---
     const typedOutput = document.getElementById('typed-output');
@@ -76,8 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const typeSpeed = 120; // milliseconds
         const deleteSpeed = 60;
         const pauseBetweenPhrases = 1800;
+        let typeTimeout; // To clear timeout if needed
 
         function type() {
+            clearTimeout(typeTimeout); // Clear previous timeout
             typedCursor.style.display = 'inline';
             const currentPhrase = phrases[phraseIndex];
             let textToDisplay = '';
@@ -101,19 +125,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 phraseIndex = (phraseIndex + 1) % phrases.length;
                 delay = typeSpeed; // Start typing next word quickly
             }
-            setTimeout(type, delay);
+            typeTimeout = setTimeout(type, delay);
         }
         if (phrases.length > 0) { // Only start if there are phrases
-           setTimeout(type, 500); // Initial delay before typing starts
+           typeTimeout = setTimeout(type, 500); // Initial delay before typing starts
         }
     }
 
 
     // --- Active Link Highlighting & Dot Navigation ---
-    const mainNavLinksJS = document.querySelectorAll('#navbar .nav-link'); // Renamed to avoid conflict
+    const mainNavLinksJS = document.querySelectorAll('#navbar .nav-link');
     const dotNavLinksJS = document.querySelectorAll('#dot-navigation .dot-link');
-    const sectionsJS = document.querySelectorAll('.main-section'); // Renamed
-    const headerHeightJS = mainHeader?.offsetHeight || 70; // Renamed
+    const sectionsJS = document.querySelectorAll('.main-section');
+    const headerHeightJS = mainHeader?.offsetHeight || 70;
 
     function updateActiveLink() {
         let currentSectionId = '';
@@ -121,23 +145,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         sectionsJS.forEach(section => {
             const sectionTop = section.offsetTop - headerHeightJS;
-            const distanceToTop = Math.abs(window.scrollY - sectionTop);
+            // const distanceToTop = Math.abs(window.scrollY - sectionTop); // Not used currently
 
-            if (window.scrollY >= sectionTop - 100 && window.scrollY < sectionTop + section.offsetHeight -100) {
-                 // Prioritize sections fully in view or just entered
+            // Adjusted condition for better accuracy: check if scrollY is within the section bounds
+            // considering a bit of buffer for the header and user perception
+            if (window.scrollY >= sectionTop - 50 && window.scrollY < sectionTop + section.offsetHeight - headerHeightJS - 50) {
                 currentSectionId = section.getAttribute('id');
                 return; // Exit early if a good match is found
             }
-            
-            // Fallback for finding the closest section if none are "perfectly" in view
-            if (distanceToTop < minDistance) {
-                minDistance = distanceToTop;
-                if (!currentSectionId) currentSectionId = section.getAttribute('id'); // Only set if not already set by better logic
-            }
         });
         
+        // If no section is actively matched by the above, check the closest (fallback)
+        // This is helpful for very short sections or unusual scroll positions
+        if (!currentSectionId) {
+            sectionsJS.forEach(section => {
+                const sectionTop = section.offsetTop - headerHeightJS;
+                const distanceToTop = Math.abs(window.scrollY - sectionTop);
+                 if (distanceToTop < minDistance) {
+                    minDistance = distanceToTop;
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+        }
+        
         // If at the very top, ensure 'hero-section' is active
-        if (window.scrollY < sectionsJS[0].offsetTop + sectionsJS[0].offsetHeight / 3) {
+        if (window.scrollY < sectionsJS[0].offsetTop + sectionsJS[0].offsetHeight / 2 - headerHeightJS) {
             currentSectionId = sectionsJS[0].getAttribute('id');
         }
 
@@ -167,12 +199,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
                 } else {
-                    // Optional: Remove class to re-animate on scroll up/out
-                    // entry.target.classList.remove('is-visible');
+                    entry.target.classList.remove('is-visible');
                 }
             });
         }, {
-            threshold: 0.15 // Trigger when 15% of the element is visible
+            threshold: 0.15
         });
         animatedElements.forEach(el => observer.observe(el));
     }
@@ -190,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Form Submitted:', { name, email, message });
                 alert('Thank you for your message! (Details logged to console)');
                 contactForm.reset();
-                // Manually trigger blur on inputs to reset floating labels if CSS relies on :valid
                 document.querySelectorAll('#contact-form input, #contact-form textarea').forEach(input => {
                     input.blur();
                 });
@@ -205,26 +235,5 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentYearElement) {
         currentYearElement.textContent = new Date().getFullYear();
     }
-
-    // --- Adjust main content padding top based on header height ---
-    // This is a robust way to prevent header overlap, especially if header height changes dynamically
-    const mainContent = document.getElementById('main-content');
-    if (mainContent && mainHeader) {
-        const setMainContentPadding = () => {
-            // The hero section is full height, so it doesn't need this padding.
-            // Other sections will get their padding from .content-section CSS.
-            // This logic primarily ensures that if a link jumps to a section,
-            // it accounts for the header.
-            // However, the hero section (#hero-section) is special.
-            // It should start at the very top.
-            // Other sections are handled by the .content-section padding-top
-            // if (document.getElementById('hero-section')) {
-            //    document.getElementById('hero-section').style.paddingTop = '0';
-            // }
-        };
-        setMainContentPadding();
-        window.addEventListener('resize', setMainContentPadding); // Recalculate on resize
-    }
-
 
 }); // End DOMContentLoaded
