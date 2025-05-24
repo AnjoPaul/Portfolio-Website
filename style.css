@@ -606,6 +606,10 @@ a:hover {
     html { font-size: 15px; }
     .section-title { font-size: 2.2rem; margin-bottom: 2.5rem; }
 
+    .hero-parallax-bg {
+        background-attachment: scroll;
+    }
+
     .nav-menu {
         position: fixed;
         left: -100%;
