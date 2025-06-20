@@ -5,13 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Anjo Paul - Developer Portfolio</title>
+
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
+
     <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;500;700&display=swap"
         rel="stylesheet">
-    <!-- Font Awesome - GET YOUR KIT! -->
-    <script src="https://kit.fontawesome.com/YOUR_FONT_AWESOME_KIT_CODE.js" crossorigin="anonymous"></script>
+
+    <!-- LOCAL Font Awesome -->
+    <link rel="stylesheet" href="vendor/fontawesome/all.min.css">
 </head>
 
 <body>
@@ -69,7 +73,7 @@
                 <a href="#projects" class="cta-button animate-on-scroll fade-in-up delay-3">View My Work</a>
             </div>
             <a href="#about" class="scroll-down-indicator" aria-label="Scroll to About section">
-                <i class="fas fa-chevron-down"></i>
+                <i class="fa-solid fa-chevron-down"></i>
             </a>
         </section>
 
@@ -79,7 +83,6 @@
             <div class="about-container">
                 <div class="about-image-wrapper animate-on-scroll slide-in-left">
                     <img src="assets/profilepic.jpg" alt="Your Name - Profile Picture" class="about-image">
-                    <!-- Fallback if image fails: <div class="profile-img-placeholder">YN</div> -->
                 </div>
                 <div class="about-text animate-on-scroll slide-in-right">
                     <p>Hi there! I'm Anjo Paul, a final year B.Tech Computer Science student at Amrita University,
@@ -99,22 +102,22 @@
             <h2 class="section-title animate-on-scroll fade-in-up">My Skills</h2>
             <div class="skills-grid">
                 <div class="skill-card animate-on-scroll zoom-in">
-                    <i class="fas fa-code skill-icon"></i>
+                    <i class="fa-solid fa-code skill-icon"></i>
                     <h3>Languages</h3>
                     <p>Python, Java, JavaScript, C++, HTML5, CSS3, Dart</p>
                 </div>
                 <div class="skill-card animate-on-scroll zoom-in delay-1">
-                    <i class="fas fa-cogs skill-icon"></i>
+                    <i class="fa-solid fa-cogs skill-icon"></i>
                     <h3>Frameworks/Libraries</h3>
                     <p>React, Node.js, Flask, Flutter</p>
                 </div>
                 <div class="skill-card animate-on-scroll zoom-in delay-2">
-                    <i class="fas fa-database skill-icon"></i>
+                    <i class="fa-solid fa-database skill-icon"></i>
                     <h3>Databases</h3>
                     <p>MongoDB, MySQL, Firebase</p>
                 </div>
                 <div class="skill-card animate-on-scroll zoom-in delay-3">
-                    <i class="fas fa-tools skill-icon"></i>
+                    <i class="fa-solid fa-tools skill-icon"></i>
                     <h3>Tools & Platforms</h3>
                     <p>Git, GitHub, VS Code, AWS (Basic), Firebase Console, Wordpress</p>
                 </div>
@@ -139,7 +142,7 @@
                         <p class="project-tech-stack"><strong>Tech:</strong> Python</p>
                         <div class="project-links">
                             <a href="https://github.com/AnjoPaul/RE-to-NFA-to-DFA" target="_blank"
-                                class="project-link-btn"><i class="fab fa-github"></i> GitHub</a>
+                                class="project-link-btn"><i class="fa-brands fa-github"></i> GitHub</a>
                         </div>
                     </div>
                 </div>
@@ -157,13 +160,10 @@
                         <p class="project-tech-stack"><strong>Tech:</strong> Python, Flask, Socket programming</p>
                         <div class="project-links">
                             <a href="https://github.com/AnjoPaul/LiveStreamChat" target="_blank"
-                                class="project-link-btn"><i class="fab fa-github"></i> GitHub</a>
-                            <!-- <a href="#" target="_blank" class="project-link-btn disabled"><i class="fas fa-external-link-alt"></i> Demo (N/A)</a> -->
+                                class="project-link-btn"><i class="fa-brands fa-github"></i> GitHub</a>
                         </div>
                     </div>
                 </div>
-                <!-- Add more project cards as needed -->
-
                 <!-- Project 3 -->
                 <div class="project-card animate-on-scroll fade-in-up delay-1">
                     <div class="project-image-container">
@@ -180,12 +180,10 @@
                         <p class="project-tech-stack"><strong>Tech:</strong> Python, NetworkX, Matplotlib</p>
                         <div class="project-links">
                             <a href="https://github.com/AnjoPaul/GPS-Navigation-System" target="_blank"
-                                class="project-link-btn"><i class="fab fa-github"></i> GitHub</a>
-                            <!-- <a href="#" target="_blank" class="project-link-btn disabled"><i class="fas fa-external-link-alt"></i> Demo (N/A)</a> -->
+                                class="project-link-btn"><i class="fa-brands fa-github"></i> GitHub</a>
                         </div>
                     </div>
                 </div>
-
                 <!-- Project 4 -->
                 <div class="project-card animate-on-scroll fade-in-up delay-1">
                     <div class="project-image-container">
@@ -202,8 +200,7 @@
                             CSS, AI/Plagiarism Detection Models</p>
                         <div class="project-links">
                             <a href="https://github.com/AnjoPaul/Student-Teacher-Portal" target="_blank"
-                                class="project-link-btn"><i class="fab fa-github"></i> GitHub</a>
-                            <!-- <a href="#" target="_blank" class="project-link-btn disabled"><i class="fas fa-external-link-alt"></i> Demo (N/A)</a> -->
+                                class="project-link-btn"><i class="fa-brands fa-github"></i> GitHub</a>
                         </div>
                     </div>
                 </div>
@@ -211,7 +208,6 @@
         </section>
 
         <!-- Contact Section -->
-         <!-- {/* Alternate background */} -->
         <section id="contact" class="main-section content-section alt-bg-section"> 
             <h2 class="section-title animate-on-scroll fade-in-up">Get In Touch</h2>
             <p class="contact-intro animate-on-scroll fade-in-up delay-1">
@@ -233,11 +229,9 @@
                 <button type="submit" class="cta-button form-submit-btn">Send Message</button>
             </form>
             <div class="social-links animate-on-scroll fade-in-up delay-3">
-                <a href="mailto:youremail@example.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                <a href="https://linkedin.com/in/yourprofile" target="_blank" aria-label="LinkedIn"><i
-                        class="fab fa-linkedin"></i></a>
-                <a href="https://github.com/yourusername" target="_blank" aria-label="GitHub"><i
-                        class="fab fa-github"></i></a>
+                <a href="mailto:anjopaul1944@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+                <a href="https://www.linkedin.com/in/anjo-paul-696880284/" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://github.com/AnjoPaul" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
             </div>
         </section>
     </main>

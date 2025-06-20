@@ -536,19 +536,24 @@ a:hover {
     color: var(--accent-primary);
 }
 .form-submit-btn { justify-self: center; width: auto; min-width: 200px; }
+
 .social-links {
-    text-align: center;
-    margin-top: 3.5rem;
+    /* This ensures the container is centered and has space */
+    display: flex;
+    justify-content: center;
+    gap: 2rem; /* Adds space between icons */
+    margin-top: 2rem;
 }
-.social-links a {
-    font-size: 2rem;
-    color: var(--text-secondary);
-    margin: 0 1.2rem;
+
+.social-links a i {
+    font-size: 2.5rem; /* Makes the icons large enough to be seen easily */
+    color: #ffc107;   /* Sets a bright, visible color (your theme's yellow) */
     transition: color 0.3s ease, transform 0.3s ease;
 }
-.social-links a:hover {
-    color: var(--accent-primary);
-    transform: translateY(-4px);
+
+.social-links a:hover i {
+    color: #fff; /* Changes color to white on hover */
+    transform: scale(1.1); /* Slightly enlarges icon on hover */
 }
 
 /* --- Footer --- */
